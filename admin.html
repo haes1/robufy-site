@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="/admin.css"/>
 </head>
 <body>
-<div class="bg-fx"></div>
 
 <!-- LOGIN -->
 <section id="login" class="login-wrap">
@@ -27,77 +26,97 @@
 </section>
 
 <!-- DASHBOARD -->
-<section id="dash" class="dash" hidden>
-  <header class="top">
-    <div class="logo"><span class="shield">🛡️</span> Robufy <span class="tag">admin</span></div>
-    <div class="top-actions">
-      <button id="refresh" class="btn-ghost">↻ Обновить</button>
-      <button id="logout" class="btn-ghost">Выйти</button>
+<div id="dash" class="layout" hidden>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-logo"><span class="shield">🛡️</span> <span>Robufy</span></div>
+    <nav class="side-nav">
+      <button class="tab active" data-tab="visits"><span class="ic">📄</span> Заходы</button>
+      <button class="tab" data-tab="analytics"><span class="ic">📊</span> Аналитика</button>
+      <button class="tab" data-tab="settings"><span class="ic">⚙️</span> Настройки</button>
+    </nav>
+    <div class="side-foot">
+      <a class="side-link" href="/">← На сайт</a>
+      <button id="logout" class="side-link danger">⎋ Выйти</button>
     </div>
-  </header>
+  </aside>
+  <div class="side-backdrop" id="backdrop"></div>
 
-  <div class="tabs">
-    <button class="tab active" data-tab="visits">Заходы</button>
-    <button class="tab" data-tab="analytics">Аналитика</button>
-    <button class="tab" data-tab="settings">Настройки</button>
-  </div>
-
-  <!-- TAB 1: VISITS -->
-  <div id="tab-visits" class="tab-panel">
-    <div class="panel">
-      <div class="panel-h">Журнал заходов <span id="visitsCount" class="muted"></span></div>
-      <div class="filters">
-        <button class="chip active" data-filter="all">Все</button>
-        <button class="chip" data-filter="humans">👤 Люди</button>
-        <button class="chip" data-filter="bots">🤖 Боты</button>
-        <button class="chip" data-filter="yandex">🟥 Боты Яндекса</button>
+  <!-- MAIN -->
+  <main class="main">
+    <header class="topbar">
+      <button class="burger" id="burger" aria-label="Меню">☰</button>
+      <div class="page-title" id="pageTitle">Журнал заходов</div>
+      <div class="top-actions">
+        <button id="refresh" class="btn-ghost">↻ Обновить</button>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>Время</th><th>IP</th><th>Страница</th><th>Источник</th>
-            <th>Тип</th><th>Браузер</th><th>ОС</th><th>Устройство</th><th>Язык</th>
-          </tr></thead>
-          <tbody id="visitsBody"></tbody>
-        </table>
+    </header>
+
+    <div class="content">
+
+      <!-- TAB 1: VISITS -->
+      <div id="tab-visits" class="tab-panel">
+        <div id="visitCards" class="cards"></div>
+        <div class="panel">
+          <div class="panel-h">Журнал заходов <span id="visitsCount" class="muted"></span></div>
+          <div class="filters">
+            <button class="chip active" data-filter="all">Все</button>
+            <button class="chip" data-filter="humans">👤 Люди</button>
+            <button class="chip" data-filter="bots">🤖 Боты</button>
+            <button class="chip" data-filter="yandex">🟥 Боты Яндекса</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Время</th><th>IP</th><th>Страница</th><th>Источник</th>
+                <th>Тип</th><th>Браузер</th><th>ОС</th><th>Устройство</th><th>Язык</th>
+              </tr></thead>
+              <tbody id="visitsBody"></tbody>
+            </table>
+          </div>
+          <div id="visitsEmpty" class="empty" hidden>Пока нет заходов. Откройте главную страницу сайта — заход появится здесь.</div>
+        </div>
       </div>
-      <div id="visitsEmpty" class="empty" hidden>Пока нет заходов. Откройте главную страницу сайта — заход появится здесь.</div>
-    </div>
-  </div>
 
-  <!-- TAB 2: ANALYTICS -->
-  <div id="tab-analytics" class="tab-panel" hidden>
-    <div id="stats" class="stats"></div>
-    <div class="grid2">
-      <div class="panel"><div class="panel-h">🤖 Боты по именам</div><div id="botsByName" class="bars"></div></div>
-      <div class="panel"><div class="panel-h">🤖 Боты по сервисам</div><div id="botVendors" class="bars"></div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-h">Заходы по дням (7 дней)</div>
-      <div id="byDay" class="bars"></div>
-    </div>
-    <div class="grid2">
-      <div class="panel"><div class="panel-h">Топ страниц</div><div id="topPages" class="bars"></div></div>
-      <div class="panel"><div class="panel-h">Источники</div><div id="referrers" class="bars"></div></div>
-      <div class="panel"><div class="panel-h">Браузеры</div><div id="browsers" class="bars"></div></div>
-      <div class="panel"><div class="panel-h">Операционные системы</div><div id="os" class="bars"></div></div>
-      <div class="panel"><div class="panel-h">Устройства</div><div id="devices" class="bars"></div></div>
-    </div>
-  </div>
+      <!-- TAB 2: ANALYTICS -->
+      <div id="tab-analytics" class="tab-panel" hidden>
+        <div id="stats" class="stats"></div>
+        <div class="grid2">
+          <div class="panel"><div class="panel-h">🤖 Боты по именам</div><div id="botsByName" class="bars"></div></div>
+          <div class="panel"><div class="panel-h">🤖 Боты по сервисам</div><div id="botVendors" class="bars"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h">Заходы по дням (7 дней)</div>
+          <div id="byDay" class="bars"></div>
+        </div>
+        <div class="grid2">
+          <div class="panel"><div class="panel-h">Топ страниц</div><div id="topPages" class="bars"></div></div>
+          <div class="panel"><div class="panel-h">Источники</div><div id="referrers" class="bars"></div></div>
+          <div class="panel"><div class="panel-h">Браузеры</div><div id="browsers" class="bars"></div></div>
+          <div class="panel"><div class="panel-h">Операционные системы</div><div id="os" class="bars"></div></div>
+          <div class="panel"><div class="panel-h">Устройства</div><div id="devices" class="bars"></div></div>
+        </div>
+      </div>
 
-  <!-- TAB 3: SETTINGS -->
-  <div id="tab-settings" class="tab-panel" hidden>
-    <div class="panel">
-      <div class="panel-h">Настройки акции</div>
-      <label class="field-lg"><span>Ссылка проверки в MAX</span>
-        <input id="maxLink" type="url" placeholder="https://max.ru/ваш_бот"/>
-      </label>
-      <p class="hint">Эта ссылка открывается на шаге «Подтвердить через MAX» в колесе. Сервер отдаёт её сайту — изменения применяются сразу после сохранения.</p>
-      <div id="setMsg" class="set-msg" hidden></div>
-      <button id="saveSettings" class="btn-grad">Сохранить</button>
+      <!-- TAB 3: SETTINGS -->
+      <div id="tab-settings" class="tab-panel" hidden>
+        <div class="panel">
+          <div class="panel-h">Настройки акции</div>
+          <div class="panel-body">
+            <label class="field-lg"><span>Ссылка проверки в MAX</span>
+              <input id="maxLink" type="url" placeholder="https://max.ru/ваш_бот"/>
+            </label>
+            <p class="hint">Эта ссылка открывается на шаге «Подтвердить через MAX» в колесе. Сервер отдаёт её сайту — изменения применяются сразу после сохранения.</p>
+            <div id="setMsg" class="set-msg" hidden></div>
+            <button id="saveSettings" class="btn-grad btn-inline">Сохранить</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </div>
-</section>
+  </main>
+</div>
 
 <script src="/admin.js"></script>
 </body>
