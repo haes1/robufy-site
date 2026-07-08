@@ -39,6 +39,7 @@
   <div class="tabs">
     <button class="tab active" data-tab="visits">Заходы</button>
     <button class="tab" data-tab="analytics">Аналитика</button>
+    <button class="tab" data-tab="settings">Настройки</button>
   </div>
 
   <!-- TAB 1: VISITS -->
@@ -81,6 +82,19 @@
       <div class="panel"><div class="panel-h">Браузеры</div><div id="browsers" class="bars"></div></div>
       <div class="panel"><div class="panel-h">Операционные системы</div><div id="os" class="bars"></div></div>
       <div class="panel"><div class="panel-h">Устройства</div><div id="devices" class="bars"></div></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: SETTINGS -->
+  <div id="tab-settings" class="tab-panel" hidden>
+    <div class="panel">
+      <div class="panel-h">Настройки акции</div>
+      <label class="field-lg"><span>Ссылка проверки в MAX</span>
+        <input id="maxLink" type="url" placeholder="https://max.ru/ваш_бот"/>
+      </label>
+      <p class="hint">Эта ссылка открывается на шаге «Подтвердить через MAX» в колесе. Сервер отдаёт её сайту — изменения применяются сразу после сохранения.</p>
+      <div id="setMsg" class="set-msg" hidden></div>
+      <button id="saveSettings" class="btn-grad">Сохранить</button>
     </div>
   </div>
 </section>
