@@ -134,7 +134,12 @@
     '.rbx-win{font-size:20px;font-weight:900;color:#17172B}'+
     '.rbx-amt{font-size:16px;color:#17172B;margin:4px 0 14px}'+
     '.rbx-amt b{color:#7C5CFC;font-size:22px}'+
-    '.rbx-claim{width:100%;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(90deg,#5B8DEF,#A855F7 52%,#F3A66B)}';
+    '.rbx-claim{width:100%;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(90deg,#5B8DEF,#A855F7 52%,#F3A66B)}'+
+    '.rbx-verify{font-size:14px;color:#17172B;line-height:1.45;margin:2px 0 14px}'+
+    '.rbx-max{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;text-decoration:none;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(90deg,#2B7FFF,#8B5CF6);box-shadow:0 8px 20px rgba(43,127,255,.35);margin-bottom:10px}'+
+    '.rbx-max:active{transform:translateY(1px)}'+
+    '.rbx-done{width:100%;border:0;border-radius:14px;padding:14px;font-size:15px;font-weight:800;color:#7C5CFC;background:#EEE8FD;cursor:pointer;font-family:inherit}'+
+    '.rbx-done:disabled{opacity:.5;cursor:default}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     var VALUES = [10,100,1000,10000,10,100,1000,10000];
@@ -192,7 +197,19 @@
         '<button class="rbx-claim" id="rbxClaim">\u0417\u0430\u0431\u0440\u0430\u0442\u044c \u043f\u043e\u0434\u0430\u0440\u043e\u043a</button>';
       spinBtn.style.display = 'none';
       var claim = wrap.querySelector('#rbxClaim');
-      if (claim) claim.addEventListener('click', function(){ close(); var t=document.querySelector('#tabs button[data-view="buy"]'); if(t) t.click(); });
+      if (claim) claim.addEventListener('click', function(){
+        // TODO: вставьте ссылку на вашего бота/канал MAX и доделайте проверку подтверждения
+        var MAX_LINK = 'https://max.ru/';
+        result.innerHTML = '<div class="rbx-win">🎁 Ваш приз: <span style="color:#7C5CFC">'+wonValue+' R$</span></div>'+
+          '<div class="rbx-verify">Остался один шаг: подтвердите, что вы не робот, в мессенджере MAX — и мы зачислим бонус.</div>'+
+          '<a class="rbx-max" id="rbxMax" href="'+MAX_LINK+'" target="_blank" rel="noopener">🛡️ Подтвердить через MAX</a>'+
+          '<button class="rbx-done" id="rbxDone" disabled>Я подтвердил — забрать бонус</button>';
+        var maxBtn = wrap.querySelector('#rbxMax');
+        var done = wrap.querySelector('#rbxDone');
+        // после перехода в MAX разблокируем кнопку подтверждения (замените на реальную проверку)
+        if (maxBtn) maxBtn.addEventListener('click', function(){ setTimeout(function(){ if (done) done.disabled = false; }, 1200); });
+        if (done) done.addEventListener('click', function(){ close(); var t=document.querySelector('#tabs button[data-view="buy"]'); if(t) t.click(); });
+      });
     });
 
     wrap.querySelector('.rbx-x').addEventListener('click', close);
