@@ -1,0 +1,9 @@
+{
+  "name": "robufy-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Robufy shop + password-protected admin panel",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

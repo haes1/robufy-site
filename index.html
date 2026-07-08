@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Robufy — купить робуксы</title>
+<meta name="description" content="Robufy — магазин робуксов для Roblox. Лучший курс, моментальная доставка, цены в рублях, поддержка 24/7."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="bg-fx"></div>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#" class="brand"><span class="m"></span> Robufy</a>
+    <nav class="tabs" id="tabs">
+      <button class="on" data-view="buy"><span class="i">🛍️</span> Купить робуксы</button>
+      <button data-view="free"><span class="i">🎁</span> Бесплатно</button>
+      <button data-view="raffle"><span class="i">🎟️</span> Розыгрыш</button>
+      <button data-modal="purchases"><span class="i">📋</span> Мои покупки</button>
+      <button data-modal="promo"><span class="i">🏷️</span> Промокод</button>
+    </nav>
+    <div class="nav-right">
+      <a class="soc" data-social title="Discord">🎮</a>
+      <a class="soc" data-social title="VK">🅜️</a>
+      <a class="soc" data-social title="Telegram">✈️</a>
+      <button class="btn btn-grad" data-modal="login">Войти</button>
+      <button class="burger" id="burger">☰</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ============ BUY ============ -->
+  <section class="view on" id="view-buy">
+    <div class="stack">
+      <div class="card">
+        <div class="pills">
+          <span class="pill lav">Лучший курс робуксов</span>
+          <span class="pill gray">✦ Доступна моментальная доставка</span>
+        </div>
+        <div class="conv">
+          <input id="rub" type="text" inputmode="decimal" value="757.57"/>
+          <span class="unit">₽</span>
+          <span class="eq">=</span>
+          <input id="rbx" type="number" min="1" value="1000"/>
+          <span class="unit">R$</span>
+        </div>
+        <div class="slider">
+          <div class="track"></div><div class="fill" id="fill"></div>
+          <div class="knob-lbl" id="knobLbl">1000</div>
+          <input type="range" id="range" min="50" max="10000" step="10" value="1000"/>
+        </div>
+        <button class="btn btn-grad hero-cta" data-buy>Купить робуксы</button>
+        <div class="hr"></div>
+        <div class="stock"><span class="l">В наличии:</span><span class="r">476 809 R$</span></div>
+      </div>
+
+      <div class="card info">
+        <div class="ava"></div>
+        <div><h3>Покупай робуксы дешевле, чем где-либо</h3><p>Лучший курс на рынке, моментальная отправка робуксов после оплаты и круглосуточная работа сайта</p></div>
+      </div>
+
+      <div>
+        <div class="lp-h"><span class="live"></span> Последние покупки</div>
+        <div class="lp-row" id="lpList"></div>
+      </div>
+
+      <div class="trust">
+        <div class="b"><div class="v">1 ₽ = 1.32 R$</div><h4>Лучший курс</h4><p>Выгодный курс покупки среди всех площадок</p></div>
+        <div class="b"><div class="v">Проверенный</div><h4>Работаем с 2020 года</h4><p>Круглосуточная поддержка, всегда готова помочь</p></div>
+        <div class="b"><div class="v">~ 5 мин</div><h4>Быстрая отправка</h4><p>Начнём трансфер робуксов вскоре после покупки</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b data-count="500000" data-suffix="+">0</b><small>Покупок</small></div>
+        <div class="stat"><b data-count="200000" data-suffix="+">0</b><small>Пользователей</small></div>
+        <div class="stat"><b data-count="250" data-suffix="M+">0</b><small>Робуксов куплено</small></div>
+      </div>
+
+      <div class="faq">
+        <div class="sec-title" style="margin:8px 2px 14px">Популярные вопросы</div>
+        <details open><summary>Как мне купить робуксы?</summary><p>Укажите нужное количество робуксов на этой странице, нажмите «Купить», введите игровой ник и почту, затем оплатите заказ и следуйте инструкции.</p></details>
+        <details><summary>Могу ли я доверять Robufy?</summary><p>Мы выполняем все клиентские заказы и работаем по публичной оферте. Попробуйте сначала небольшую покупку и убедитесь сами.</p></details>
+        <details><summary>Нужен ли пароль от аккаунта?</summary><p>Нет. Для пополнения достаточно игрового ника. Никогда не сообщайте пароль третьим лицам.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FREE ============ -->
+  <section class="view" id="view-free">
+    <div class="stack">
+      <div class="card">
+        <div class="sec-title">Бонусный баланс</div>
+        <div class="sec-sub">Бесплатные робуксы, полученные за приглашение друзей и выполнение заданий</div>
+        <div class="bal">
+          <div class="bal-l"><div class="k">Доступно к выводу</div><div class="v" id="freeBal">0 R$</div><button class="btn btn-grad" id="withdraw">Вывести Робуксы</button></div>
+          <div class="money">💵💰💵</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">Задания</div>
+        <div class="sec-sub">Бесплатные робуксы за выполнение заданий</div>
+        <div class="tasks" id="freeTasks">
+          <div class="task"><div class="top"><div class="lb">Подпишись на<br/><b>Группу VK ↗</b></div><div class="rw">+5 <span class="c"></span></div></div><button class="go">Я подписался</button></div>
+          <div class="task"><div class="top"><div class="lb">Присоединись к<br/><b>Discord серверу ↗</b></div><div class="rw">+5 <span class="c"></span></div></div><button class="go">Я присоединился</button></div>
+          <div class="task"><div class="top"><div class="lb">Подпишись на<br/><b>Telegram канал ↗</b></div><div class="rw">+5 <span class="c"></span></div></div><button class="go">Я подписался</button></div>
+          <div class="task"><div class="top"><div class="lb">Подпишись на<br/><b>YouTube канал ↗</b></div><div class="rw">+3 <span class="c"></span></div></div><button class="go">Я подписался</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="friends">
+          <div><div class="sec-title">Приглашай друзей</div><div class="sec-sub" style="margin:0">Получай награды, а они получат бонус к первой покупке.</div></div>
+          <button class="btn btn-soft" id="copyRef">Скопировать ссылку</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RAFFLE ============ -->
+  <section class="view" id="view-raffle">
+    <div class="stack">
+      <div class="card raffle-head">
+        <div><div class="sec-title">Розыгрыш на 300.000 Робуксов!</div><div class="sec-sub" style="margin:0">Присоединяйтесь к нашему захватывающему конкурсу и станьте одним из 300 победителей!</div></div>
+        <div class="gift">🎁</div>
+      </div>
+      <div class="card">
+        <div class="sec-title" style="margin-bottom:16px">Призы для участников</div>
+        <div class="prizes">
+          <div class="prize"><div class="ic">💰</div><div class="v">300 000 R$</div><div class="k">Общая сумма</div></div>
+          <div class="prize"><div class="ic">🏆</div><div class="v">300</div><div class="k">Победителей</div></div>
+          <div class="prize"><div class="ic">🪙</div><div class="v">1 000 R$</div><div class="k">Получит победитель</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-title">Условия участия</div>
+        <div class="sec-sub">Вы можете получить 10 билетов для участия · билетов у вас: <b id="tickets" style="color:var(--lavtx)">0</b></div>
+        <div class="cond">
+          <div class="cond-row">
+            <div><div class="lb">Подпишись на соц. сети</div>
+              <div class="socpills"><button class="socpill" data-ticket="1">✈️ Telegram</button><button class="socpill" data-ticket="1">🅜️ VK</button><button class="socpill" data-ticket="1">🎮 Discord</button></div>
+            </div>
+            <div class="tick">+1 <span class="c"></span></div>
+          </div>
+          <div class="cond-row">
+            <div><div class="lb">Пригласи 1 друга по своему промокоду, за каждого дополнительно +1 билет</div>
+              <div class="promo-share"><span class="code">PROMO</span><button class="socpill" data-ticket="2">Поделиться</button></div>
+            </div>
+            <div class="tick">+2 <span class="c"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a href="#" class="brand"><span class="m"></span> Robufy</a>
+      <div class="lks">
+        <a data-buy>Купить робуксы</a>
+        <a data-social>Discord</a>
+        <a data-doc="terms">Условия использования</a>
+        <a data-doc="offer">Публичная оферта</a>
+        <a data-doc="privacy">Политика конфиденциальности</a>
+        <a data-doc="refund">Возврат и гарантии</a>
+      </div>
+    </div>
+    <div class="legal">Robufy — независимый сервис и не связан с Roblox Corporation. «Roblox» и «Robux» — товарные знаки их правообладателей. Цены в рублях РФ. ИП Иванов Иван Иванович · ИНН 771234567890 · ОГРНИП 320774600123456 · © 2020–2026 Robufy. Сервис для пользователей от 18 лет либо несовершеннолетних с согласия родителей.</div>
+  </div>
+</footer>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal" id="m-checkout">
+  <div class="m-bg" data-close></div>
+  <div class="m-card">
+    <button class="m-x" data-close>✕</button>
+    <div id="cs1">
+      <h3>Оформление заказа</h3>
+      <p class="ms">Пароль от аккаунта не требуется.</p>
+      <div class="m-sum"><span>К оплате за <b id="cRbx" style="font-size:14px">1000</b> R$</span><b id="cRub">757.57 ₽</b></div>
+      <input class="inp" id="cNick" placeholder="Игровой ник Roblox"/>
+      <input class="inp" id="cEmail" type="email" placeholder="E-mail для связи"/>
+      <button class="btn btn-grad" id="cPay" style="width:100%">Перейти к оплате</button>
+      <p style="text-align:center;color:var(--mut2);font-size:12px;margin-top:12px">Нажима��, вы соглашаетесь с публичной офертой</p>
+    </div>
+    <div id="cs2" style="display:none;text-align:center">
+      <div class="okc">✓</div>
+      <h3>Заказ создан!</h3>
+      <p class="ms" style="margin-top:8px">Детали оплаты отправлены на <b id="cEmailOut" style="color:var(--tx)"></b>. После оплаты робуксы поступят на ник <b id="cNickOut" style="color:var(--tx)"></b> в течение 5–60 минут.</p>
+      <button class="btn btn-soft" data-close style="width:100%">Готово</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="m-login">
+  <div class="m-bg" data-close></div>
+  <div class="m-card">
+    <button class="m-x" data-close>✕</button>
+    <h3>Вход</h3>
+    <p class="ms">Войдите, чтобы видеть историю заказов и бонусы.</p>
+    <input class="inp" id="lEmail" type="email" placeholder="Введите e-mail..."/>
+    <button class="btn btn-grad" id="lBtn" style="width:100%">Получить код входа</button>
+  </div>
+</div>
+
+<!-- PURCHASES MODAL -->
+<div class="modal" id="m-purchases">
+  <div class="m-bg" data-close></div>
+  <div class="m-card">
+    <button class="m-x" data-close>✕</button>
+    <h3>Мои покупки</h3>
+    <p class="ms">Введи свой никнейм, чтобы посмотреть историю транзакций или переотправить робуксы</p>
+    <input class="inp" id="pNick" placeholder="Игровой ник..."/>
+    <button class="btn btn-grad" id="pBtn" style="width:100%">Посмотреть покупки</button>
+  </div>
+</div>
+
+<!-- PROMO MODAL -->
+<div class="modal" id="m-promo">
+  <div class="m-bg" data-close></div>
+  <div class="m-card">
+    <button class="m-x" data-close>✕</button>
+    <h3>Промокод</h3>
+    <input class="inp" id="promoInp" placeholder="Введите код..." style="margin-bottom:16px"/>
+    <button class="btn btn-grad" id="promoBtn" style="width:100%">Активировать</button>
+    <div class="m-foot">
+      <div class="t">Нет промокода?</div>
+      <div class="d">Подпишись на нашу группу ВКонтакте и сообщество Discord, где мы регулярно проводим раздачу промокодов на бесплатные робуксы!</div>
+      <div class="socpills"><button class="socpill" data-social>🅜️ VK ↗</button><button class="socpill" data-social>✈️ Telegram ↗</button><button class="socpill" data-social>🎮 Discord ↗</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- DOCUMENT MODAL -->
+<div class="modal" id="m-doc">
+  <div class="m-bg" data-close></div>
+  <div class="m-card" style="max-width:580px">
+    <button class="m-x" data-close>✕</button>
+    <h3 id="docTitle">Документ</h3>
+    <div id="docBody" class="doc-body"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Robufy — Админ-панель</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/admin.css"/>
+</head>
+<body>
+<div class="bg-fx"></div>
+
+<!-- LOGIN -->
+<section id="login" class="login-wrap">
+  <form id="loginForm" class="login-card" autocomplete="off">
+    <div class="logo"><span class="shield">🛡️</span> Robufy</div>
+    <h1>Админ-панель</h1>
+    <p class="sub">Введите пароль для доступа</p>
+    <label class="field">
+      <span>Пароль</span>
+      <input id="pw" type="password" placeholder="••••••••••" autocomplete="current-password" required/>
+    </label>
+    <div id="err" class="err" hidden></div>
+    <button id="loginBtn" type="submit" class="btn-grad">Войти</button>
+    <a class="back" href="/">← На сайт</a>
+  </form>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dash" class="dash" hidden>
+  <header class="top">
+    <div class="logo"><span class="shield">🛡️</span> Robufy <span class="tag">admin</span></div>
+    <button id="logout" class="btn-ghost">Выйти</button>
+  </header>
+  <h1 class="dash-title">Панель управления</h1>
+  <div id="stats" class="stats"></div>
+  <div class="panel">
+    <div class="panel-h">Последние заказы</div>
+    <div class="table-wrap">
+      <table id="orders">
+        <thead><tr><th>Заказ</th><th>Ник</th><th>Robux</th><th>Сумма</th><th>Статус</th><th>Время</th></tr></thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script src="/admin.js"></script>
+</body>
+</html>
