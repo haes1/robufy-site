@@ -1,4 +1,3 @@
-// Admin panel client. Contains NO password. Renders REAL visit data from the server.
 (function () {
   var $ = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
@@ -97,7 +96,6 @@
     }).join('');
   }
 
-  // Visit filters
   $$('.chip').forEach(function (btn) {
     btn.addEventListener('click', function () {
       $$('.chip').forEach(function (b) { b.classList.remove('active'); });
@@ -107,7 +105,6 @@
     });
   });
 
-  // Tabs / sidebar nav
   var TITLES = { visits: 'Журнал заходов', analytics: 'Аналитика', settings: 'Настройки' };
   $$('.tab').forEach(function (btn) {
     btn.addEventListener('click', function () {
