@@ -1,7 +1,7 @@
-// Robufy backend — serves the shop and a password-protected /admin panel.
+// Robufy backend (flat layout: all files live in the repo root).
 // The admin password is NOT in the code. It is read from the .env file
-// (or a real environment variable) at startup and only ever compared
-// on the server. The browser never receives it.
+// (or a real environment variable) at startup and only ever compared on
+// the server. Sensitive files (.env, server.js, ...) are never served.
 
 const http = require('http');
 const fs = require('fs');
@@ -25,11 +25,13 @@ const PORT = Number(process.env.PORT) || 3000;
 const SESSION_HOURS = 8;
 
 if (!PASSWORD) {
-  console.error('\n[!] ADMIN_PASSWORD is not set. Create a .env file with ADMIN_PASSWORD=... (see .env.example)\n');
+  console.error('\n[!] ADMIN_PASSWORD is not set. Add it to .env or the environment (see .env.example)\n');
   process.exit(1);
 }
 
-const PUBLIC = path.join(__dirname, 'public');
+const ROOT = __dirname;
+// Files that must never be sent to the browser.
+const DENY = new Set(['server.js', 'package.json', 'package-lock.json', '.env', '.env.example', '.gitignore', 'readme.md']);
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -39,7 +41,6 @@ const MIME = {
   '.ico': 'image/x-icon', '.woff2': 'font/woff2'
 };
 
-// --- signed session tokens (HMAC) ---
 function sign(data) { return crypto.createHmac('sha256', SECRET).update(data).digest('base64url'); }
 function makeToken() {
   const exp = Date.now() + SESSION_HOURS * 3600 * 1000;
@@ -78,15 +79,14 @@ function serveFile(res, file) {
   });
 }
 
-// --- demo admin data (replace with your real data source) ---
 function adminData() {
   return {
     ok: true,
     stats: [
-      { label: 'Заказов сегодня', value: 128 },
-      { label: 'Выручка сегодня', value: '96 480 \u20bd' },
-      { label: 'В очереди', value: 4 },
-      { label: 'Robux в наличии', value: '476 809' }
+      { label: '\u0417\u0430\u043a\u0430\u0437\u043e\u0432 \u0441\u0435\u0433\u043e\u0434\u043d\u044f', value: 128 },
+      { label: '\u0412\u044b\u0440\u0443\u0447\u043a\u0430 \u0441\u0435\u0433\u043e\u0434\u043d\u044f', value: '96 480 \u20bd' },
+      { label: '\u0412 \u043e\u0447\u0435\u0440\u0435\u0434\u0438', value: 4 },
+      { label: 'Robux \u0432 \u043d\u0430\u043b\u0438\u0447\u0438\u0438', value: '476 809' }
     ],
     orders: [
       { id: 'RB-10241', nick: 'ShadowFox', rbx: 1000, sum: '758 \u20bd', status: '\u0412\u044b\u043f\u043e\u043b\u043d\u0435\u043d', time: '21:12' },
@@ -102,7 +102,6 @@ const server = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://localhost');
   const p = u.pathname;
 
-  // Login: compare password on the SERVER only
   if (p === '/api/admin/login' && req.method === 'POST') {
     let body = '';
     req.on('data', c => { body += c; if (body.length > 10000) req.destroy(); });
@@ -136,13 +135,14 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Admin page (the gate itself contains no password)
-  if (p === '/admin' || p === '/admin/') { serveFile(res, path.join(PUBLIC, 'admin.html')); return; }
+  if (p === '/admin' || p === '/admin/') { serveFile(res, path.join(ROOT, 'admin.html')); return; }
 
-  // Static files
-  const rel = p === '/' ? 'index.html' : p.replace(/^\/+/, '');
-  const filePath = path.normalize(path.join(PUBLIC, rel));
-  if (!filePath.startsWith(PUBLIC)) { res.writeHead(403); res.end('Forbidden'); return; }
+  // Static files from the repo root, with sensitive files blocked.
+  const rel = p === '/' ? 'index.html' : decodeURIComponent(p.replace(/^\/+/, ''));
+  const base = path.basename(rel).toLowerCase();
+  if (DENY.has(base) || base.startsWith('.')) { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }); res.end('404 Not Found'); return; }
+  const filePath = path.normalize(path.join(ROOT, rel));
+  if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) { res.writeHead(403); res.end('Forbidden'); return; }
   serveFile(res, filePath);
 });
 
