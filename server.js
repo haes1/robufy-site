@@ -1,15 +1,9 @@
-// Robufy backend + REAL visit analytics (no demo data).
-// - Logs every page visit to the site (server-side) with full request info.
-// - Admin panel reads real data via /api/admin/visits and /api/admin/stats.
-// - Password is read from .env (or env var), compared only on the server,
-//   and sensitive files (.env, server.js, visits.jsonl, ...) are never served.
 
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// --- tiny .env loader (no dependencies) ---
 const envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
   for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
@@ -39,7 +33,6 @@ const MIME = {
   '.ico': 'image/x-icon', '.woff2': 'font/woff2'
 };
 
-// ---------------- Visit store ----------------
 const VISITS_FILE = path.join(ROOT, 'visits.jsonl');
 const MAX_MEM = 20000;
 let visits = [];
@@ -50,7 +43,6 @@ try {
   }
 } catch (e) { console.error('visit load failed', e.message); }
 
-// ---------------- Settings store ----------------
 const SETTINGS_FILE = path.join(ROOT, 'settings.json');
 let settings = { maxLink: 'https://max.ru/' };
 try {
@@ -122,7 +114,6 @@ function recordVisit(req, pathname) {
   fs.appendFile(VISITS_FILE, JSON.stringify(v) + '\n', () => {});
 }
 
-// ---------------- helpers ----------------
 function sign(data) { return crypto.createHmac('sha256', SECRET).update(data).digest('base64url'); }
 function makeToken() { const exp = Date.now() + SESSION_HOURS * 3600 * 1000; const payload = 'admin.' + exp; return payload + '.' + sign(payload); }
 function verifyToken(tok) {
@@ -246,7 +237,6 @@ const server = http.createServer((req, res) => {
   const filePath = path.normalize(path.join(ROOT, rel));
   if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) { res.writeHead(403); res.end('Forbidden'); return; }
 
-  // Record a real site visit for HTML page loads (not the admin panel, not assets).
   const ext = path.extname(filePath).toLowerCase();
   if (req.method === 'GET' && (ext === '.html' || ext === '') && base !== 'admin.html') {
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) recordVisit(req, p);
