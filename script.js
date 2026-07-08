@@ -105,3 +105,89 @@
     if(toasts.children.length>3)toasts.removeChild(toasts.firstChild);}
   window.addEventListener('resize',function(){setSlider(+range.value);});
 })();
+
+/* ===== Подарочное колесо (только мобильные, не боты): всегда выпадает 1000 R$ ===== */
+(function(){
+  try{
+    var ua = navigator.userAgent || '';
+    var isBot = /bot|crawl|spider|slurp|Yandex|Google|bing|Mail\.RU|Ahrefs|Semrush|DotBot|MJ12|Petal|Bytespider|GPTBot|CCBot|Claude|Applebot|facebookexternalhit|Twitterbot|Telegram|Discord|WhatsApp|HeadlessChrome|PhantomJS|python-requests|curl\/|wget/i.test(ua);
+    var isMobile = /Android|iPhone|iPod|iPad|Mobile|Opera Mini|IEMobile|BlackBerry/i.test(ua) || (('ontouchstart' in window) && Math.min(window.innerWidth, window.innerHeight) <= 820);
+    if (isBot || !isMobile) return;
+
+    var css = ''+
+    '.rbx-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(23,23,43,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}'+
+    '.rbx-modal.open{display:flex}'+
+    '.rbx-box{position:relative;width:100%;max-width:380px;background:#fff;border-radius:26px;padding:26px 22px 24px;text-align:center;box-shadow:0 30px 80px rgba(23,23,43,.35);animation:rbxIn .35s ease}'+
+    '@keyframes rbxIn{from{transform:translateY(24px) scale(.96);opacity:0}to{transform:none;opacity:1}}'+
+    '.rbx-x{position:absolute;top:12px;right:14px;border:0;background:#F3F2F8;width:34px;height:34px;border-radius:50%;font-size:20px;color:#9A9AAF;cursor:pointer;line-height:1}'+
+    '.rbx-badge{display:inline-block;background:#EEE8FD;color:#8B5CF6;font-weight:800;font-size:12px;padding:6px 14px;border-radius:999px;margin-bottom:12px}'+
+    '.rbx-box h2{font-size:21px;font-weight:900;color:#17172B;line-height:1.25;margin:0 0 6px}'+
+    '.rbx-box p{color:#9A9AAF;font-size:14px;margin:0 0 18px}'+
+    '.rbx-wheel-wrap{position:relative;width:230px;height:230px;margin:0 auto 20px}'+
+    '.rbx-pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:22px solid #17172B;z-index:3;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}'+
+    '.rbx-wheel{width:230px;height:230px;border-radius:50%;position:relative;transition:transform 5s cubic-bezier(.15,.67,.13,.99);box-shadow:0 0 0 8px #fff,0 0 0 12px #ECEBF3,0 12px 30px rgba(124,92,252,.3);background:conic-gradient(from 0deg,#7C5CFC 0 45deg,#5B8DEF 45deg 90deg,#A855F7 90deg 135deg,#F3A66B 135deg 180deg,#7C5CFC 180deg 225deg,#5B8DEF 225deg 270deg,#A855F7 270deg 315deg,#F3A66B 315deg 360deg)}'+
+    '.rbx-lbl{position:absolute;left:50%;top:50%;font-weight:800;font-size:15px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.28);white-space:nowrap}'+
+    '.rbx-hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;color:#7C5CFC;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:2}'+
+    '.rbx-spin{width:100%;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(90deg,#5B8DEF,#A855F7 52%,#F3A66B)}'+
+    '.rbx-spin:disabled{opacity:.75;cursor:default}'+
+    '.rbx-result{margin-top:4px}'+
+    '.rbx-win{font-size:20px;font-weight:900;color:#17172B}'+
+    '.rbx-amt{font-size:16px;color:#17172B;margin:4px 0 14px}'+
+    '.rbx-amt b{color:#7C5CFC;font-size:22px}'+
+    '.rbx-claim{width:100%;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(90deg,#5B8DEF,#A855F7 52%,#F3A66B)}';
+    var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+
+    var VALUES = [10,100,1000,10000,10,100,1000,10000];
+    var labels = '';
+    for (var i=0;i<8;i++){ var a=i*45+22.5; labels += '<span class="rbx-lbl" style="transform:translate(-50%,-50%) rotate('+a+'deg) translateY(-92px) rotate('+(-a)+'deg)">'+VALUES[i]+'</span>'; }
+
+    var wrap = document.createElement('div');
+    wrap.className = 'rbx-modal'; wrap.id = 'rbxGift';
+    wrap.innerHTML =
+      '<div class="rbx-box">'+
+        '<button class="rbx-x" aria-label="\u0417\u0430\u043a\u0440\u044b\u0442\u044c">&times;</button>'+
+        '<div class="rbx-badge">\ud83c\udf89 \u0412 \u0447\u0435\u0441\u0442\u044c \u0432\u043e\u0437\u0432\u0440\u0430\u0449\u0435\u043d\u0438\u044f Roblox</div>'+
+        '<h2>\u041c\u044b \u0434\u0430\u0440\u0438\u043c \u0440\u043e\u0431\u0443\u043a\u0441\u044b \u043d\u043e\u0432\u044b\u043c \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f\u043c!</h2>'+
+        '<p>\u041a\u0440\u0443\u0442\u0438 \u043a\u043e\u043b\u0435\u0441\u043e \u0438 \u0437\u0430\u0431\u0438\u0440\u0430\u0439 \u0441\u0432\u043e\u0439 \u043f\u043e\u0434\u0430\u0440\u043e\u043a \ud83c\udf81</p>'+
+        '<div class="rbx-wheel-wrap">'+
+          '<div class="rbx-pointer"></div>'+
+          '<div class="rbx-wheel" id="rbxWheel">'+labels+'</div>'+
+          '<div class="rbx-hub">R$</div>'+
+        '</div>'+
+        '<button class="rbx-spin" id="rbxSpin">\u041a\u0440\u0443\u0442\u0438\u0442\u044c \u043a\u043e\u043b\u0435\u0441\u043e</button>'+
+        '<div class="rbx-result" id="rbxResult" hidden></div>'+
+      '</div>';
+    document.body.appendChild(wrap);
+
+    function close(){ wrap.classList.remove('open'); document.body.style.overflow=''; }
+
+    var wheel = wrap.querySelector('#rbxWheel');
+    var spinBtn = wrap.querySelector('#rbxSpin');
+    var result = wrap.querySelector('#rbxResult');
+    var spun = false;
+
+    spinBtn.addEventListener('click', function(){
+      if (spun) return; spun = true;
+      spinBtn.disabled = true; spinBtn.textContent = '\u041a\u0440\u0443\u0442\u0438\u043c\u2026';
+      var jitter = (Math.random()*30) - 15;           // \u00b115\u00b0 \u0432 \u043f\u0440\u0435\u0434\u0435\u043b\u0430\u0445 \u0441\u0435\u043a\u0442\u043e\u0440\u0430
+      var target = 360*8 + 247.5 + jitter;            // \u0441\u0435\u043a\u0442\u043e\u0440 \u0441\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435\u043c 1000 \u0432\u0441\u0442\u0430\u0451\u0442 \u043f\u043e\u0434 \u0443\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c
+      wheel.style.transform = 'rotate('+target+'deg)';
+    });
+
+    wheel.addEventListener('transitionend', function(){
+      if (!spun || !result.hidden) return;
+      result.hidden = false;
+      result.innerHTML = '<div class="rbx-win">\ud83c\udf89 \u041f\u043e\u0437\u0434\u0440\u0430\u0432\u043b\u044f\u0435\u043c!</div>'+
+        '<div class="rbx-amt">\u0412\u044b \u0432\u044b\u0438\u0433\u0440\u0430\u043b\u0438 <b>1000 R$</b></div>'+
+        '<button class="rbx-claim" id="rbxClaim">\u0417\u0430\u0431\u0440\u0430\u0442\u044c \u043f\u043e\u0434\u0430\u0440\u043e\u043a</button>';
+      spinBtn.style.display = 'none';
+      var claim = wrap.querySelector('#rbxClaim');
+      if (claim) claim.addEventListener('click', function(){ close(); var t=document.querySelector('#tabs button[data-view="buy"]'); if(t) t.click(); });
+    });
+
+    wrap.querySelector('.rbx-x').addEventListener('click', close);
+    wrap.addEventListener('click', function(e){ if (e.target === wrap) close(); });
+
+    setTimeout(function(){ wrap.classList.add('open'); document.body.style.overflow='hidden'; }, 900);
+  }catch(e){}
+})();
