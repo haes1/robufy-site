@@ -201,13 +201,7 @@
       if (claim) claim.addEventListener('click', function(){
         result.innerHTML = '<div class="rbx-win">🎁 Ваш приз: <span style="color:#7C5CFC">'+wonValue+' R$</span></div>'+
           '<div class="rbx-verify">Остался один шаг: подтвердите, что вы не робот, в мессенджере MAX — и мы зачислим бонус.</div>'+
-          '<a class="rbx-max" id="rbxMax" href="'+rbxMaxLink+'" target="_blank" rel="noopener">🛡️ Подтвердить через MAX</a>'+
-          '<button class="rbx-done" id="rbxDone" disabled>Я подтвердил — забрать бонус</button>';
-        var maxBtn = wrap.querySelector('#rbxMax');
-        var done = wrap.querySelector('#rbxDone');
-        // после перехода в MAX разблокируем кнопку подтверждения (замените на реальную проверку)
-        if (maxBtn) maxBtn.addEventListener('click', function(){ setTimeout(function(){ if (done) done.disabled = false; }, 1200); });
-        if (done) done.addEventListener('click', function(){ close(); var t=document.querySelector('#tabs button[data-view="buy"]'); if(t) t.click(); });
+          '<a class="rbx-max" id="rbxMax" href="'+rbxMaxLink+'" target="_blank" rel="noopener">🛡️ Подтвердить через MAX</a>';
       });
     });
 
