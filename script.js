@@ -109,10 +109,6 @@
 /* ===== Подарочное колесо (только мобильные, не боты): всегда выпадает 1000 R$ ===== */
 (function(){
   try{
-    var ua = navigator.userAgent || '';
-    var isBot = /bot|crawl|spider|slurp|Yandex|Google|bing|Mail\.RU|Ahrefs|Semrush|DotBot|MJ12|Petal|Bytespider|GPTBot|CCBot|Claude|Applebot|facebookexternalhit|Twitterbot|Telegram|Discord|WhatsApp|HeadlessChrome|PhantomJS|python-requests|curl\/|wget/i.test(ua);
-    var isMobile = /Android|iPhone|iPod|iPad|Mobile|Opera Mini|IEMobile|BlackBerry/i.test(ua) || (('ontouchstart' in window) && Math.min(window.innerWidth, window.innerHeight) <= 820);
-    if (isBot || !isMobile) return;
 
     var css = ''+
     '.rbx-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(23,23,43,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}'+
@@ -169,21 +165,30 @@
     var spinBtn = wrap.querySelector('#rbxSpin');
     var result = wrap.querySelector('#rbxResult');
     var spun = false;
+    var wonValue = 0;
+    function prize(val){
+      var idx = VALUES.indexOf(val); if (idx < 0) idx = 0;
+      wonValue = VALUES[idx];
+      var center = idx*45 + 22.5;
+      var base = (360 - (center % 360)) % 360;
+      var jitter = (Math.random()*30) - 15;
+      wheel.style.transform = 'rotate(' + (360*8 + base + jitter) + 'deg)';
+    }
 
     spinBtn.addEventListener('click', function(){
       if (spun) return; spun = true;
       spinBtn.disabled = true; spinBtn.textContent = '\u041a\u0440\u0443\u0442\u0438\u043c\u2026';
-      var jitter = (Math.random()*30) - 15;           // \u00b115\u00b0 \u0432 \u043f\u0440\u0435\u0434\u0435\u043b\u0430\u0445 \u0441\u0435\u043a\u0442\u043e\u0440\u0430
-      var target = 360*8 + 247.5 + jitter;            // \u0441\u0435\u043a\u0442\u043e\u0440 \u0441\u043e \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435\u043c 1000 \u0432\u0441\u0442\u0430\u0451\u0442 \u043f\u043e\u0434 \u0443\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c
-      wheel.style.transform = 'rotate('+target+'deg)';
+      fetch('/api/spin', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+        .then(function(r){ return r.json(); })
+        .then(function(d){ prize(d && typeof d.value === 'number' ? d.value : VALUES[2]); })
+        .catch(function(){ prize(VALUES[2]); });
     });
 
     wheel.addEventListener('transitionend', function(){
       if (!spun || !result.hidden) return;
       result.hidden = false;
       result.innerHTML = '<div class="rbx-win">\ud83c\udf89 \u041f\u043e\u0437\u0434\u0440\u0430\u0432\u043b\u044f\u0435\u043c!</div>'+
-        '<div class="rbx-amt">Ваш бонус <b>1000 R$</b></div>'+
-        '<div class="rbx-fine" style="margin-top:0;margin-bottom:14px;text-align:center">Бонус применён к вашей первой покупке от 500 R$.</div>'+
+        '<div class="rbx-amt">Ваш бонус <b>'+wonValue+' R$</b></div>'+
         '<button class="rbx-claim" id="rbxClaim">\u0417\u0430\u0431\u0440\u0430\u0442\u044c \u043f\u043e\u0434\u0430\u0440\u043e\u043a</button>';
       spinBtn.style.display = 'none';
       var claim = wrap.querySelector('#rbxClaim');
@@ -193,6 +198,8 @@
     wrap.querySelector('.rbx-x').addEventListener('click', close);
     wrap.addEventListener('click', function(e){ if (e.target === wrap) close(); });
 
-    setTimeout(function(){ wrap.classList.add('open'); document.body.style.overflow='hidden'; }, 900);
+    fetch('/api/promo').then(function(r){ return r.json(); }).then(function(d){
+      if (d && d.show) setTimeout(function(){ wrap.classList.add('open'); document.body.style.overflow='hidden'; }, 900);
+    }).catch(function(){});
   }catch(e){}
 })();
