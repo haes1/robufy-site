@@ -107,6 +107,8 @@
       var tab = btn.dataset.tab;
       $('#tab-visits').hidden = tab !== 'visits';
       $('#tab-analytics').hidden = tab !== 'analytics';
+      $('#tab-settings').hidden = tab !== 'settings';
+      if (tab === 'settings') loadSettings();
     });
   });
 
@@ -123,6 +125,27 @@
 
   $('#refresh').addEventListener('click', loadAll);
   $('#logout').addEventListener('click', function () { fetch('/api/admin/logout', { method: 'POST' }).finally(showLogin); });
+
+  function loadSettings() {
+    fetch('/api/admin/settings', { headers: { Accept: 'application/json' } })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (d) { if (d && d.ok) $('#maxLink').value = d.maxLink || ''; })
+      .catch(function () {});
+  }
+  var saveBtn = $('#saveSettings');
+  if (saveBtn) saveBtn.addEventListener('click', function () {
+    var msg = $('#setMsg'), val = $('#maxLink').value.trim();
+    msg.hidden = true; saveBtn.disabled = true; saveBtn.textContent = 'Сохранение…';
+    fetch('/api/admin/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ maxLink: val }) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (res.ok && res.j.ok) { msg.className = 'set-msg ok'; msg.textContent = 'Сохранено ✓'; $('#maxLink').value = res.j.maxLink; }
+        else { msg.className = 'set-msg bad'; msg.textContent = (res.j && res.j.error) || 'Ошибка сохранения'; }
+        msg.hidden = false;
+      })
+      .catch(function () { msg.className = 'set-msg bad'; msg.textContent = 'Ошибка соединения'; msg.hidden = false; })
+      .finally(function () { saveBtn.disabled = false; saveBtn.textContent = 'Сохранить'; });
+  });
 
   fetch('/api/admin/session').then(function (r) { return r.json(); })
     .then(function (d) { if (d.authenticated) showDash(); else showLogin(); })
