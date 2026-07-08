@@ -177,6 +177,15 @@ const server = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://localhost');
   const p = u.pathname;
 
+  if (p === '/api/spin' && req.method === 'POST') { json(res, 200, { ok: true, value: 1000 }); return; }
+
+  if (p === '/api/promo') {
+    const uaP = req.headers['user-agent'] || '';
+    const show = !detectBot(uaP).isBot && parseUA(uaP).device === 'Mobile';
+    json(res, 200, { show: show });
+    return;
+  }
+
   if (p === '/api/admin/login' && req.method === 'POST') {
     let body = ''; req.on('data', c => { body += c; if (body.length > 10000) req.destroy(); });
     req.on('end', () => {
