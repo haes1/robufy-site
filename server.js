@@ -31,7 +31,7 @@ if (!PASSWORD) {
 }
 
 const ROOT = __dirname;
-const DENY = new Set(['server.js', 'package.json', 'package-lock.json', '.env', '.env.example', '.gitignore', 'readme.md', 'visits.jsonl']);
+const DENY = new Set(['server.js', 'package.json', 'package-lock.json', '.env', '.env.example', '.gitignore', 'readme.md', 'visits.jsonl', 'settings.json']);
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8',
@@ -49,6 +49,17 @@ try {
     visits = lines.slice(-MAX_MEM).map(l => { try { return JSON.parse(l); } catch (e) { return null; } }).filter(Boolean);
   }
 } catch (e) { console.error('visit load failed', e.message); }
+
+// ---------------- Settings store ----------------
+const SETTINGS_FILE = path.join(ROOT, 'settings.json');
+let settings = { maxLink: 'https://max.ru/' };
+try {
+  if (fs.existsSync(SETTINGS_FILE)) {
+    const s = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
+    if (s && typeof s === 'object') settings = Object.assign(settings, s);
+  }
+} catch (e) { console.error('settings load failed', e.message); }
+function saveSettings() { try { fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2)); } catch (e) { console.error('settings save failed', e.message); } }
 
 function parseUA(ua) {
   ua = ua || '';
@@ -182,7 +193,7 @@ const server = http.createServer((req, res) => {
   if (p === '/api/promo') {
     const uaP = req.headers['user-agent'] || '';
     const show = !detectBot(uaP).isBot && parseUA(uaP).device === 'Mobile';
-    json(res, 200, { show: show });
+    json(res, 200, { show: show, maxLink: settings.maxLink });
     return;
   }
 
@@ -207,6 +218,23 @@ const server = http.createServer((req, res) => {
   if (p === '/api/admin/stats') {
     if (!authed(req)) { json(res, 401, { ok: false, error: 'unauthorized' }); return; }
     json(res, 200, buildStats());
+    return;
+  }
+
+  if (p === '/api/admin/settings' && req.method === 'GET') {
+    if (!authed(req)) { json(res, 401, { ok: false, error: 'unauthorized' }); return; }
+    json(res, 200, { ok: true, maxLink: settings.maxLink });
+    return;
+  }
+  if (p === '/api/admin/settings' && req.method === 'POST') {
+    if (!authed(req)) { json(res, 401, { ok: false, error: 'unauthorized' }); return; }
+    let body = ''; req.on('data', c => { body += c; if (body.length > 10000) req.destroy(); });
+    req.on('end', () => {
+      let link = ''; try { link = (JSON.parse(body || '{}').maxLink || '').toString().trim(); } catch (e) {}
+      if (!/^https?:\/\//i.test(link)) { json(res, 400, { ok: false, error: 'Ссылка должна начинаться с http:// или https://' }); return; }
+      settings.maxLink = link; saveSettings();
+      json(res, 200, { ok: true, maxLink: settings.maxLink });
+    });
     return;
   }
 
