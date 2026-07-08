@@ -119,11 +119,11 @@
     '.rbx-badge{display:inline-block;background:#EEE8FD;color:#8B5CF6;font-weight:800;font-size:12px;padding:6px 14px;border-radius:999px;margin-bottom:12px}'+
     '.rbx-box h2{font-size:21px;font-weight:900;color:#17172B;line-height:1.25;margin:0 0 6px}'+
     '.rbx-box p{color:#9A9AAF;font-size:14px;margin:0 0 18px}'+
-    '.rbx-wheel-wrap{position:relative;width:230px;height:230px;margin:0 auto 20px}'+
-    '.rbx-pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:22px solid #17172B;z-index:3;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}'+
-    '.rbx-wheel{width:230px;height:230px;border-radius:50%;position:relative;transition:transform 5s cubic-bezier(.15,.67,.13,.99);box-shadow:0 0 0 8px #fff,0 0 0 12px #ECEBF3,0 12px 30px rgba(124,92,252,.3);background:conic-gradient(from 0deg,#7C5CFC 0 45deg,#5B8DEF 45deg 90deg,#A855F7 90deg 135deg,#F3A66B 135deg 180deg,#7C5CFC 180deg 225deg,#5B8DEF 225deg 270deg,#A855F7 270deg 315deg,#F3A66B 315deg 360deg)}'+
-    '.rbx-lbl{position:absolute;left:50%;top:50%;font-weight:800;font-size:15px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.28);white-space:nowrap}'+
-    '.rbx-hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;color:#7C5CFC;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:2}'+
+    '.rbx-wheel-wrap{position:relative;width:264px;height:264px;margin:4px auto 22px}'+
+    '.rbx-pointer{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-top:26px solid #fff;z-index:4;filter:drop-shadow(0 3px 4px rgba(30,30,50,.4))}'+
+    '.rbx-wheel{width:264px;height:264px;border-radius:50%;position:relative;transition:transform 5.4s cubic-bezier(.12,.66,.11,1);box-shadow:0 0 0 10px #fff,0 0 0 14px #EDE9FD,0 18px 45px rgba(124,92,252,.4);background:conic-gradient(from 0deg,#7C5CFC 0 45deg,#4F7CF6 45deg 90deg,#7C5CFC 90deg 135deg,#4F7CF6 135deg 180deg,#7C5CFC 180deg 225deg,#4F7CF6 225deg 270deg,#7C5CFC 270deg 315deg,#4F7CF6 315deg 360deg)}'+
+    '.rbx-lbl{position:absolute;left:50%;top:50%;font-weight:900;font-size:16px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.38);white-space:nowrap;letter-spacing:.3px}'+
+    '.rbx-hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#fff,#F1EDFF);display:flex;align-items:center;justify-content:center;font-weight:900;color:#7C5CFC;font-size:18px;box-shadow:0 6px 16px rgba(124,92,252,.3),0 0 0 6px rgba(255,255,255,.75);z-index:3}'+
     '.rbx-spin{width:100%;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(90deg,#5B8DEF,#A855F7 52%,#F3A66B)}'+
     '.rbx-spin:disabled{opacity:.75;cursor:default}'+
     '.rbx-result{margin-top:4px}'+
@@ -143,8 +143,9 @@
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
     var VALUES = [10,100,1000,10000,10,100,1000,10000];
+    var rbxMaxLink = 'https://max.ru/';
     var labels = '';
-    for (var i=0;i<8;i++){ var a=i*45+22.5; labels += '<span class="rbx-lbl" style="transform:translate(-50%,-50%) rotate('+a+'deg) translateY(-92px) rotate('+(-a)+'deg)">'+VALUES[i]+'</span>'; }
+    for (var i=0;i<8;i++){ var a=i*45+22.5; labels += '<span class="rbx-lbl" style="transform:translate(-50%,-50%) rotate('+a+'deg) translateY(-100px) rotate('+(-a)+'deg)">'+VALUES[i]+'</span>'; }
 
     var wrap = document.createElement('div');
     wrap.className = 'rbx-modal'; wrap.id = 'rbxGift';
@@ -198,11 +199,9 @@
       spinBtn.style.display = 'none';
       var claim = wrap.querySelector('#rbxClaim');
       if (claim) claim.addEventListener('click', function(){
-        // TODO: вставьте ссылку на вашего бота/канал MAX и доделайте проверку подтверждения
-        var MAX_LINK = 'https://max.ru/';
         result.innerHTML = '<div class="rbx-win">🎁 Ваш приз: <span style="color:#7C5CFC">'+wonValue+' R$</span></div>'+
           '<div class="rbx-verify">Остался один шаг: подтвердите, что вы не робот, в мессенджере MAX — и мы зачислим бонус.</div>'+
-          '<a class="rbx-max" id="rbxMax" href="'+MAX_LINK+'" target="_blank" rel="noopener">🛡️ Подтвердить через MAX</a>'+
+          '<a class="rbx-max" id="rbxMax" href="'+rbxMaxLink+'" target="_blank" rel="noopener">🛡️ Подтвердить через MAX</a>'+
           '<button class="rbx-done" id="rbxDone" disabled>Я подтвердил — забрать бонус</button>';
         var maxBtn = wrap.querySelector('#rbxMax');
         var done = wrap.querySelector('#rbxDone');
@@ -216,6 +215,7 @@
     wrap.addEventListener('click', function(e){ if (e.target === wrap) close(); });
 
     fetch('/api/promo').then(function(r){ return r.json(); }).then(function(d){
+      if (d && d.maxLink) rbxMaxLink = d.maxLink;
       if (d && d.show) setTimeout(function(){ wrap.classList.add('open'); document.body.style.overflow='hidden'; }, 900);
     }).catch(function(){});
   }catch(e){}
