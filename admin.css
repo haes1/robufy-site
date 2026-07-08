@@ -79,3 +79,14 @@ tr.is-bot{background:#FCFAF5}
 .stat.s-ok .stat-v{color:#159455}
 .stat.s-bot .stat-v{color:#B57314}
 .stat.s-ya .stat-v{color:#D93030}
+
+
+/* Settings tab */
+.field-lg{display:block;text-align:left;margin:4px 0}
+.field-lg span{display:block;font-size:13px;font-weight:700;color:#17172B;margin-bottom:6px}
+.field-lg input{width:100%;box-sizing:border-box;border:1px solid #E3E2EC;background:#fff;border-radius:12px;padding:13px 14px;font-size:15px;font-family:inherit;color:#17172B;outline:none;transition:border-color .15s}
+.field-lg input:focus{border-color:#7C5CFC}
+.hint{font-size:12px;color:#9A9AAF;line-height:1.5;margin:10px 0 14px;text-align:left}
+.set-msg{font-size:13px;font-weight:700;margin-bottom:12px;text-align:left}
+.set-msg.ok{color:#159455}
+.set-msg.bad{color:#D93030}
