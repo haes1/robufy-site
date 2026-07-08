@@ -74,6 +74,14 @@
     bars('#browsers', d.browsers || []);
     bars('#os', d.os || []);
     bars('#devices', d.devices || []);
+
+    var vc = $('#visitCards');
+    if (vc) vc.innerHTML = [
+      ['Всего заходов', t.total, ''],
+      ['👤 Люди', t.humans, 'ok'],
+      ['🤖 Боты', t.bots, 'bot'],
+      ['🟥 Яндекс', t.yandexBots, 'ya']
+    ].map(function (x) { return '<div class="stat ' + (x[2] ? 's-' + x[2] : '') + '"><div class="stat-v">' + (x[1] || 0) + '</div><div class="stat-l">' + x[0] + '</div></div>'; }).join('');
   }
 
   function bars(sel, items, keepOrder) {
@@ -99,7 +107,8 @@
     });
   });
 
-  // Tabs
+  // Tabs / sidebar nav
+  var TITLES = { visits: 'Журнал заходов', analytics: 'Аналитика', settings: 'Настройки' };
   $$('.tab').forEach(function (btn) {
     btn.addEventListener('click', function () {
       $$('.tab').forEach(function (b) { b.classList.remove('active'); });
@@ -108,9 +117,16 @@
       $('#tab-visits').hidden = tab !== 'visits';
       $('#tab-analytics').hidden = tab !== 'analytics';
       $('#tab-settings').hidden = tab !== 'settings';
+      var pt = $('#pageTitle'); if (pt) pt.textContent = TITLES[tab] || '';
+      closeSidebar();
       if (tab === 'settings') loadSettings();
     });
   });
+
+  function openSidebar(){ var sb = $('#sidebar'), bd = $('#backdrop'); if (sb) sb.classList.add('open'); if (bd) bd.classList.add('show'); }
+  function closeSidebar(){ var sb = $('#sidebar'), bd = $('#backdrop'); if (sb) sb.classList.remove('open'); if (bd) bd.classList.remove('show'); }
+  var burger = $('#burger'); if (burger) burger.addEventListener('click', openSidebar);
+  var backdrop = $('#backdrop'); if (backdrop) backdrop.addEventListener('click', closeSidebar);
 
   $('#loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
