@@ -124,7 +124,8 @@ function verifyToken(tok) {
 }
 function parseCookies(h) { const o = {}; (h || '').split(';').forEach(p => { const i = p.indexOf('='); if (i > 0) o[p.slice(0, i).trim()] = decodeURIComponent(p.slice(i + 1).trim()); }); return o; }
 function safeEqual(a, b) { const ab = Buffer.from(String(a)), bb = Buffer.from(String(b)); if (ab.length !== bb.length) return false; return crypto.timingSafeEqual(ab, bb); }
-function authed(req) { return verifyToken(parseCookies(req.headers.cookie).admin_session); }
+function bearer(req) { const h = req.headers['authorization'] || ''; const m = h.match(/^Bearer\s+(.+)$/i); return m ? m[1] : (req.headers['x-admin-token'] || ''); }
+function authed(req) { return verifyToken(parseCookies(req.headers.cookie).admin_session) || verifyToken(bearer(req)); }
 function json(res, code, obj, extra = {}) { res.writeHead(code, Object.assign({ 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }, extra)); res.end(JSON.stringify(obj)); }
 function serveFile(res, file) {
   fs.readFile(file, (err, buf) => {
@@ -180,7 +181,7 @@ const server = http.createServer((req, res) => {
     let body = ''; req.on('data', c => { body += c; if (body.length > 10000) req.destroy(); });
     req.on('end', () => {
       let pw = ''; try { pw = (JSON.parse(body || '{}').password || '').toString(); } catch (e) {}
-      if (safeEqual(pw, PASSWORD)) json(res, 200, { ok: true }, { 'Set-Cookie': `admin_session=${makeToken()}; HttpOnly; Path=/; SameSite=Strict; Max-Age=${SESSION_HOURS * 3600}` });
+      if (safeEqual(pw, PASSWORD)) { const tok = makeToken(); json(res, 200, { ok: true, token: tok }, { 'Set-Cookie': `admin_session=${tok}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${SESSION_HOURS * 3600}` }); }
       else json(res, 401, { ok: false, error: '\u041d\u0435\u0432\u0435\u0440\u043d\u044b\u0439 \u043f\u0430\u0440\u043e\u043b\u044c' });
     });
     return;
