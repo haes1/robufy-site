@@ -44,3 +44,38 @@ tbody tr:hover{background:var(--soft)}
 .badge.wait{background:#FDF0DC;color:#C7851B}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.dash-title{font-size:22px}}
 @media(max-width:480px){.stats{grid-template-columns:1fr}}
+
+/* --- analytics admin additions --- */
+.top-actions{display:flex;gap:8px}
+.muted{color:var(--mut);font-weight:500}
+.nowrap{white-space:nowrap}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:13px}
+.ref{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty{padding:26px 20px;color:var(--mut);text-align:center;font-size:14px}
+.pad{padding:16px 20px}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tab{background:var(--card);border:0;border-radius:12px;padding:10px 20px;font-weight:700;font-size:14px;color:var(--mut);cursor:pointer;box-shadow:0 6px 18px rgba(23,23,43,.05);font-family:inherit}
+.tab:hover{color:var(--tx)}
+.tab.active{background:var(--grad);color:#fff;box-shadow:0 8px 20px rgba(124,92,252,.28)}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+.bars{padding:14px 20px 18px}
+.bar-row{display:flex;align-items:center;gap:12px;margin:9px 0}
+.bar-lbl{width:150px;flex:0 0 150px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;background:var(--soft2);border-radius:999px;height:12px;overflow:hidden}
+.bar-fill{height:100%;background:var(--grad);border-radius:999px}
+.bar-val{width:52px;flex:0 0 52px;text-align:right;font-weight:700;font-size:13px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}.bar-lbl{width:110px;flex-basis:110px}}
+
+/* --- bot detection additions --- */
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 14px}
+.chip{background:var(--soft);border:0;border-radius:999px;padding:7px 15px;font-weight:700;font-size:13px;color:var(--mut);cursor:pointer;font-family:inherit}
+.chip:hover{color:var(--tx)}
+.chip.active{background:var(--grad);color:#fff}
+.badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.badge.human{background:#E4F7EC;color:#159455}
+.badge.bot{background:#FFF1DE;color:#B57314}
+.badge.bot-ya{background:#FFE3E3;color:#D93030}
+tr.is-bot{background:#FCFAF5}
+.stat.s-ok .stat-v{color:#159455}
+.stat.s-bot .stat-v{color:#B57314}
+.stat.s-ya .stat-v{color:#D93030}
