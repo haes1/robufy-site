@@ -1,5 +1,6 @@
 :root{--bg:#F4F4F8;--card:#FFFFFF;--soft:#F3F2F8;--soft2:#ECEBF3;--tx:#17172B;--mut:#9A9AAF;--lav:#EEE8FD;--lavtx:#8B5CF6;--pur:#7C5CFC;--grad:linear-gradient(90deg,#5B8DEF 0%,#A855F7 52%,#F3A66B 100%);--r:22px}
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 body{font-family:'Inter',system-ui,Arial,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased}
 .bg-fx{position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 45% at 20% 0%,#EDE7FD 0%,rgba(237,231,253,0) 60%),radial-gradient(55% 40% at 90% 5%,#FCE8D8 0%,rgba(252,232,216,0) 60%)}
 .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px}
